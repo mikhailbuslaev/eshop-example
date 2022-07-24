@@ -1,0 +1,10 @@
+echo "Connecting drop_table file...";
+docker cp ./drop_table.sql eshop_test:/drop_table.sql;
+echo "Execute drop_table file...";
+docker exec -it eshop_test psql -U postgres -d eshop_test -f /drop_table.sql;
+echo "Connecting drop_db file...";
+docker cp ./drop_db.sql eshop_test:/drop_db.sql;
+echo "Execute drop_db file...";
+docker exec -it eshop_test psql -U postgres -f /drop_db.sql;
+echo "Delete done!";
+sleep(2);

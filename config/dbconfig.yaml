@@ -1,7 +1,6 @@
-driver : "postgres"
+drivername : "postgres"
 host : "localhost"
 port : "5432"
 user : "postgres"
 password : "postgres"
 dbname : "eshop_test"
-sslmode : "disable"

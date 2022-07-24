@@ -5,36 +5,36 @@ import (
 	"log"
 
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 	"github.com/mikhailbuslaev/eshop/card"
 	"github.com/mikhailbuslaev/eshop/config"
 )
 
 type Storage struct {
 	Db       *sqlx.DB
-	DbConfig *DbConfig
+	DbConfig DbConfig
 }
 
 type DbConfig struct {
-	Driver   string
+	DriverName   string
 	Host     string
 	Port     string
 	User     string
 	Password string
 	DbName   string
-	SSLmode  string
 }
 
 func New() *Storage {
 	s := &Storage{}
-	config.Parse(s.DbConfig, "config/dbconfig.yaml")
-	dbCreds := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=%s ",
-		s.DbConfig.User, s.DbConfig.Password, s.DbConfig.Host,
-		s.DbConfig.Port, s.DbConfig.DbName, s.DbConfig.SSLmode)
+	config.Parse(&s.DbConfig, "config/dbconfig.yaml")
+	dbCreds := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+	s.DbConfig.Host, s.DbConfig.Port, s.DbConfig.User,
+	s.DbConfig.Password, s.DbConfig.DbName)
 
 	var err error
-	s.Db, err = sqlx.Connect(s.DbConfig.Driver, dbCreds)
+	s.Db, err = sqlx.Connect(s.DbConfig.DriverName, dbCreds)
 	if err != nil {
-		log.Fatalln("connection to db failed")
+		log.Fatalln("connection to db failed:"+err.Error())
 	}
 	return s
 }
@@ -58,7 +58,7 @@ func (s *Storage) GetCard(id string) (*card.Card, error) {
 }
 
 func (s *Storage) PutCard(card *card.Card) error {
-	_, err := s.Db.NamedExec("INSERT INTO cards (id, title, price, description_, count_, picture_path) VALUES (:id, :title, :price, :description_, :count_, :picture_path)", card)
+	_, err := s.Db.NamedExec("INSERT INTO cards (id, title, price, description, count, picturepath) VALUES (:id, :title, :price, :description, :count, :picturepath)", card)
 	return err
 }
 

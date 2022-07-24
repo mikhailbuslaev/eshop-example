@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/jmoiron/sqlx v1.3.5
+	github.com/lib/pq v1.2.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
