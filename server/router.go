@@ -15,10 +15,13 @@ func New() *Server {
 	s.Storage = storage.New()
 	s.Router = gin.Default()
 	// cards handlers
-	s.Router.GET("/cards", s.getCardsHandler)
-	s.Router.GET("/cards/:card", s.getCardHandler)
-	s.Router.POST("/cards/remove", s.removeCardHandler)
-	s.Router.POST("/cards/add", s.putCardHandler)
+	s.Router.POST("/cards", s.getCardsHandler)
+	s.Router.POST("/card", s.getCardHandler)
+	s.Router.POST("/cards/remove", s.deleteCardHandler)
+	s.Router.POST("/cards/add", s.addCardHandler)
+	s.Router.POST("/cards/update", s.updateCardHandler)
+	// catalog handler
+	s.Router.Static("/catalog", "./website")
 	return s
 }
 

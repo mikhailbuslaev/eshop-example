@@ -1,4 +1,4 @@
-package card
+package model
 
 type Card struct {
 	Id          string `json:"id"`
