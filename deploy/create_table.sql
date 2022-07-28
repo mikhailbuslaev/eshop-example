@@ -1,8 +1,8 @@
 create table if not exists cards (
     id varchar(25) not null unique,
-    title varchar(25),
+    title varchar(50),
     price decimal(10, 2),
-    description varchar(100),
+    description varchar(500),
     count int,
-    picturepath varchar(50)
+    picturepath varchar(100)
 );

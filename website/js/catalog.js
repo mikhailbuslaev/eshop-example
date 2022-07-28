@@ -1,6 +1,3 @@
-let routes = {};
-let templates = {};
-
 let catalogBody = document.getElementById('catalogBody');
 
 async function fetchCards(url = '', quantity = 20) {
@@ -20,17 +17,22 @@ function renderCatalog() {
     .then((data) => {
         for (const card of data.message) {
             let cardDiv = document.createElement('div');
-            cardDiv.appendChild(
-              document.createElement('h1')
-            ).textContent = card.title;
+            cardDiv.className = "cardDiv";
 
-            var img = document.createElement("img"); 
+            let title = document.createElement("h4"); 
+            title.className = "cardTitle";
+            title.textContent = card.title;
+            cardDiv.appendChild(title);
+
+            let img = document.createElement("img"); 
             img.src = card.picturepath;
+            img.className = "cardImg";
             cardDiv.appendChild(img);
 
-            cardDiv.appendChild(
-              document.createElement('h3')
-            ).textContent = card.description;
+            let description = document.createElement('p');
+            description.className = "cardPrice";
+            description.textContent = card.price;
+            cardDiv.appendChild(description);
 
             catalogBody.appendChild(cardDiv);
         }

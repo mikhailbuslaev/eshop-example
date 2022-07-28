@@ -17,7 +17,7 @@ func New() *Server {
 	// cards handlers
 	s.Router.POST("/cards", s.getCardsHandler)
 	s.Router.POST("/card", s.getCardHandler)
-	s.Router.POST("/cards/remove", s.deleteCardHandler)
+	s.Router.POST("/cards/delete", s.deleteCardHandler)
 	s.Router.POST("/cards/add", s.addCardHandler)
 	s.Router.POST("/cards/update", s.updateCardHandler)
 	// catalog handler

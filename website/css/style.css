@@ -1,0 +1,47 @@
+#headerBody {
+    background-color: rgb(215, 0, 136);
+    min-height: 150px;
+}
+
+#body {
+    background-color: rgb(255, 255, 255);
+    margin: 0px;
+    padding: 50px;
+}
+
+.headerTitle {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+    padding: 50px;
+    color: rgb(255, 255, 255);
+}
+
+#catalogBody {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 10px;
+}
+
+.cardDiv {
+    background-color: rgb(255, 255, 255);
+    width: 200px;
+    border-radius: 10px;
+    border: 1px solid rgb(149, 144, 139);
+    padding: 10px;
+}
+
+.cardTitle {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.cardImg {
+    width: 150px;
+    padding: 10px;
+}
+
+.cardPrice {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+}

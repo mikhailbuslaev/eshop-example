@@ -79,7 +79,8 @@ func (s *Server) addCardHandler(ctx *gin.Context) {
 }
 
 func (s *Server) updateCardHandler(ctx *gin.Context) {
-	cardId := ctx.Param("id")
+	cardId := ctx.PostForm("id")
+	println(cardId)
 	card, err := s.Storage.GetCard(cardId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -95,22 +96,23 @@ func (s *Server) updateCardHandler(ctx *gin.Context) {
 	if description := ctx.PostForm("description"); description != "" {
 		card.Description = description
 	}
-	count, err := strconv.Atoi(ctx.PostForm("count"))
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	if count != 0 {
+	stringCount := ctx.PostForm("count")
+	if stringCount != "" {
+		count, err := strconv.Atoi(stringCount)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 		card.Count = count
 	}
 
 	file, err := ctx.FormFile("picture")
-	if err != nil {
+	if err != nil && err != http.ErrMissingFile {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	if file.Size == 0 {
-		if err = ctx.SaveUploadedFile(file, card.PicturePath); err != nil {
+	if err != http.ErrMissingFile {
+		if err = ctx.SaveUploadedFile(file, "website/" + card.PicturePath); err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
