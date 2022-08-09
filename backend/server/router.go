@@ -21,7 +21,7 @@ func New() *Server {
 	s.Router.POST("/cards/add", s.addCardHandler)
 	s.Router.POST("/cards/update", s.updateCardHandler)
 	// catalog handler
-	s.Router.Static("/catalog", "./website")
+//	s.Router.Static("/catalog", "./website")
 	return s
 }
 
