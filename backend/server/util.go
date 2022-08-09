@@ -7,7 +7,7 @@ import (
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
-func generateId(n int) string {
+func randomString(n int) string {
 	rand.Seed(time.Now().UnixNano())
 	b := make([]rune, n)
 	for i := range b {

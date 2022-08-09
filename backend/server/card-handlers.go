@@ -17,7 +17,14 @@ func (s *Server) getCardsHandler(ctx *gin.Context) {
 	if quantity <= 0 || quantity > 100 {
 		quantity = 20
 	}
-	cards, err := s.Storage.GetCards(quantity)
+
+	startRow, err := strconv.Atoi(ctx.PostForm("startrow"))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	
+	cards, err := s.Storage.GetCards(quantity, startRow)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -57,7 +64,7 @@ func (s *Server) addCardHandler(ctx *gin.Context) {
 		return
 	}
 
-	c.Id = generateId(10)
+	c.Id = randomString(10)
 	c.PicturePath = "img/" + c.Id + ".jpg"
 	file, err := ctx.FormFile("picture")
 	if err != nil {
@@ -70,7 +77,7 @@ func (s *Server) addCardHandler(ctx *gin.Context) {
 		return
 	}
 
-	if err = ctx.SaveUploadedFile(file, "website/"+c.PicturePath); err != nil {
+	if err = ctx.SaveUploadedFile(file, "../website/"+c.PicturePath); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -112,7 +119,7 @@ func (s *Server) updateCardHandler(ctx *gin.Context) {
 		return
 	}
 	if err != http.ErrMissingFile {
-		if err = ctx.SaveUploadedFile(file, "website/" + card.PicturePath); err != nil {
+		if err = ctx.SaveUploadedFile(file, "../website/" + card.PicturePath); err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}

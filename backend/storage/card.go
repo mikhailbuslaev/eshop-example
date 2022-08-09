@@ -4,9 +4,9 @@ import (
 	"github.com/mikhailbuslaev/eshop/model"
 )
 
-func (s *Storage) GetCards(quantity int) (*[]model.Card, error) {
+func (s *Storage) GetCards(quantity, start int) (*[]model.Card, error) {
 	cards := []model.Card{}
-	err := s.Db.Select(&cards, `SELECT * FROM cards LIMIT $1`, quantity)
+	err := s.Db.Select(&cards, `SELECT * FROM cards OFFSET $1 FETCH FIRST $2 ROWS ONLY`, start, quantity)
 	if err != nil {
 		return nil, err
 	}
