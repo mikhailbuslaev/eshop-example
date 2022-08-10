@@ -29,6 +29,7 @@ func (s *Server) getCardsHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": *cards})
 }
 
@@ -39,6 +40,7 @@ func (s *Server) getCardHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": *card})
 }
 
@@ -49,6 +51,7 @@ func (s *Server) deleteCardHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": "card successfully removed"})
 }
 
@@ -77,11 +80,11 @@ func (s *Server) addCardHandler(ctx *gin.Context) {
 		return
 	}
 
-	if err = ctx.SaveUploadedFile(file, "../website/"+c.PicturePath); err != nil {
+	if err = ctx.SaveUploadedFile(file, "../frontend/eshop/public/"+c.PicturePath); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": "card successfully added"})
 }
 
@@ -119,7 +122,7 @@ func (s *Server) updateCardHandler(ctx *gin.Context) {
 		return
 	}
 	if err != http.ErrMissingFile {
-		if err = ctx.SaveUploadedFile(file, "../website/" + card.PicturePath); err != nil {
+		if err = ctx.SaveUploadedFile(file, "../frontend/eshop/public/" + card.PicturePath); err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
@@ -128,5 +131,6 @@ func (s *Server) updateCardHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": "card successfully updated"})
 }
