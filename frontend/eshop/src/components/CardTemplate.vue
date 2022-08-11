@@ -38,3 +38,16 @@ export default {
   }
 };
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+#card-body {
+  width: 500px;
+  background: #ccc;
+  margin: 1em auto;
+}
+
+.card-picture {
+  width: 500px;
+}
+</style>

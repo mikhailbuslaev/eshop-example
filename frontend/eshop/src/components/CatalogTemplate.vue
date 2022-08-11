@@ -79,11 +79,11 @@ export default {
 #catalog-body {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px 10px;
+  gap: 20px 20px;
 }
 
 .card {
-  width: 180px;
+  width: 200px;
   background: #ccc;
   margin: 1em auto;
 }
