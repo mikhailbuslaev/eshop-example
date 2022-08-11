@@ -1,17 +1,16 @@
 <template>
   <div class="home">
-    <CatalogBody/>
+    <CatalogTemplate/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import CatalogBody from '@/components/CatalogBody.vue'
-
+import CatalogTemplate from '@/components/CatalogTemplate.vue'
 export default {
   name: 'HomeView',
   components: {
-    CatalogBody
+    CatalogTemplate
   }
 }
 </script>
