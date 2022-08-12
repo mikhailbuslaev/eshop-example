@@ -1,17 +1,19 @@
 <template>
-<div class="carousel-body">
-    <div v-for="card in cards" :key="card.id">
-    <a v-bind:href="'http://localhost:8081/#/catalog/'+card.id">
-      <div class="card">
-        <img class="card-picture" :src="card.picturepath"/>
-        <h3>{{ card.title }}</h3>
-        <h4>{{ card.price }} ₽</h4>
+<div id="carousel-wrapper" ref="carouselWrapper">
+  <div id="carousel-body" ref="carouselBody">
+      <div v-for="card in cards" :key="card.id">
+      <a v-bind:href="'http://localhost:8081/#/catalog/'+card.id">
+        <div class="card">
+          <img class="card-picture" :src="card.picturepath"/>
+          <h3>{{ card.title }}</h3>
+          <h4>{{ card.price }} ₽</h4>
+        </div>
+        </a>
       </div>
-      </a>
-    </div>
+  </div>
+  <button class="btn btn-next" v-on:click="moveToLeft">&#8250;</button>
+  <button class="btn btn-prev" v-on:click="moveToRight">&#8249;</button>
 </div>
-<button class="btn btn-next">&#11166;</button>
-<button class="btn btn-prev">&#11164;</button>
 </template>
 
 <script>
@@ -22,6 +24,8 @@ export default {
     data() {
         return {
         cards: [],
+        counter : 0,
+        clicksLimit : 0
         };
     },
 
@@ -38,20 +42,52 @@ export default {
         .then((response) => {
             this.cards = response.data.message;
         });
+      },
+
+      moveCarousel() {
+        this.$refs.carouselBody.style.transform = 'translateX('+(200*this.counter)+'px';
+      },
+
+      moveToLeft : function(event) {
+        if (event) {
+          if (!(this.counter===this.clicksLimit)) {
+            this.counter--;
+            this.moveCarousel();
+          }
         }
+      },
+
+      moveToRight : function(event) {
+        if (event) {
+          if (!(this.counter===0)) {
+            this.counter++;
+            this.moveCarousel();
+          }
+        }
+      }
     },
+
     beforeMount() {
-        this.getCards();
+      this.getCards();
+    },
+
+    mounted() {
+      this.clicksLimit = -16 + Math.floor(this.$refs.carouselWrapper.clientWidth/200);
     }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.carousel-body {
+#carousel-wrapper {
+  overflow: hidden;
+  position: relative;
   margin-left:5%;
   width:90%;
-  overflow: hidden;
+}
+
+#carousel-body {
+  transition: transform 0.3s ease-in-out;
   display: flex;
   flex-wrap: nowrap;
   gap: 20px 20px;
@@ -60,7 +96,6 @@ export default {
 .card {
   width: 200px;
   background: #ccc;
-  margin: 1em auto;
 }
 
 .card-picture {
@@ -86,12 +121,22 @@ export default {
 }
 
 .btn-prev {
-  top: 170%;
+  top: 50%;
   left: 2%;
 }
 
 .btn-next {
-  top: 170%;
+  top: 50%;
   right: 2%;
+}
+
+a:link {
+  text-decoration: none;
+  color:#2c3e50;
+}
+
+a:visited {
+  text-decoration: none;
+  color:#2c3e50;
 }
 </style>

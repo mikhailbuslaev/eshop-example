@@ -1,8 +1,6 @@
 <template>
-  <div class="card">
     <CardTemplate/>
     <CarouselTemplate/>
-  </div>
 </template>
 
 <script>

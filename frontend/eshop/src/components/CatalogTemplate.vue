@@ -91,4 +91,14 @@ export default {
 .card-picture {
   width: 200px;
 }
+
+a:link {
+  text-decoration: none;
+  color:#2c3e50;
+}
+
+a:visited {
+  text-decoration: none;
+  color:#2c3e50;
+}
 </style>
