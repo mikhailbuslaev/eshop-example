@@ -2,7 +2,7 @@
 <h1>e-shop catalog example</h1>
 <div id="catalog-body">
     <div v-for="card in cards" :key="card.id">
-    <a v-bind:href="'http://localhost:8081/#/catalog/'+card.id">
+    <a v-bind:href="'http://localhost:8081/#/product/'+card.id">
       <div class="card">
         <img class="card-picture" :src="card.picturepath"/>
         <h3>{{ card.title }}</h3>
@@ -15,32 +15,24 @@
 
 <script>
 import axios from "axios";
+import underscore from 'underscore';
 export default {
   name: 'CatalogTemplate',
   data() {
     return {
       cards: [],
+      initCardsQuantity: 20,
+      nextCardsQuantity: 10,
+      loadedCardsCounter: 0,
+      cardsLimit: 100,
+      cardsBefore: 0
     };
   },
 
   methods: {
-    getInitialCards() {
-    var bodyFormData = new FormData();
-    bodyFormData.append('quantity', 20);
-    bodyFormData.append('startrow', 0);
-    axios({
-      method: 'post',
-      url: 'http://localhost:1111/api/cards',
-      data: bodyFormData
-    })
-    .then((response) => {
-        this.cards = response.data.message;
-      });
-    },
-
-    getNextCards(startRow = 0) {
+    getCards(startRow, quantity) {
       var bodyFormData = new FormData();
-      bodyFormData.append('quantity', 10);
+      bodyFormData.append('quantity', quantity);
       bodyFormData.append('startrow', startRow);
       axios({
         method: 'post',
@@ -49,26 +41,43 @@ export default {
       })
        .then(response => {
          this.cards.push(...response.data.message);
+         this.loadedCardsCounter += quantity;
+         console.log(startRow, this.loadedCardsCounter);
       });
     },
 
     handleScroll() {
-      if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
-        this.getNextCards();
+      if (document.documentElement.clientHeight + window.pageYOffset >= document.body.offsetHeight-5) {
+        console.log('scroll');
+        if (this.loadedCardsCounter >= this.cardsLimit) {
+          window.removeEventListener('scroll', this.handleScroll);
+          console.log('stop');
+          return;
+        }
+        this.getCards(this.cardsBefore+this.loadedCardsCounter-1, this.nextCardsQuantity);
       }
-    }
+    },
+
+    debouncedScroll() {}
   },
 
   mounted () {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('scroll', this.debouncedScroll);
   },
 
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.debouncedScroll);
   },
 
   beforeMount() {
-    this.getInitialCards();
+    this.debouncedScroll = underscore.debounce(this.handleScroll, 50);
+
+    this.cardsBefore = this.$route.params.page*this.cardsLimit;
+    if (this.cardsBefore>0) {
+      this.getCards(this.cardsBefore-1, this.initCardsQuantity);
+    } else {
+      this.getCards(this.cardsBefore, this.initCardsQuantity);
+    }
   }
 };
 

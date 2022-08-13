@@ -2,7 +2,7 @@
 <div class="header">
   <h1>header example</h1>
   <nav>
-      <router-link to="/">Home</router-link> |
+      <router-link to="/catalog/0">Home</router-link> |
       <router-link to="/about">About</router-link>
   </nav>
 </div>

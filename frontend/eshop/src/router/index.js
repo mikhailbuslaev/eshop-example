@@ -4,7 +4,7 @@ import AboutView from '../views/AboutView.vue'
 import CardView from '../views/CardView.vue'
 const routes = [
   {
-    path: '/',
+    path: '/catalog/:page',
     name: 'home',
     component: HomeView
   },
@@ -14,7 +14,7 @@ const routes = [
     component: AboutView
   },
   { 
-    path: '/catalog/:id', 
+    path: '/product/:id', 
     name: 'card',
     component: CardView 
   }

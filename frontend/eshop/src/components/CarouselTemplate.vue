@@ -2,7 +2,7 @@
 <div id="carousel-wrapper" ref="carouselWrapper">
   <div id="carousel-body" ref="carouselBody">
       <div v-for="card in cards" :key="card.id">
-      <a v-bind:href="'http://localhost:8081/#/catalog/'+card.id">
+      <a v-bind:href="'http://localhost:8081/#/product/'+card.id">
         <div class="card">
           <img class="card-picture" :src="card.picturepath"/>
           <h3>{{ card.title }}</h3>
@@ -25,14 +25,15 @@ export default {
         return {
         cards: [],
         counter : 0,
-        clicksLimit : 0
+        clicksLimit : 0,
+        cardsLimit : 15
         };
     },
 
     methods: {
     getCards() {
         var bodyFormData = new FormData();
-        bodyFormData.append('quantity', 15);
+        bodyFormData.append('quantity', this.cardsLimit);
         bodyFormData.append('startrow', 0);
         axios({
         method: 'post',
@@ -72,7 +73,7 @@ export default {
     },
 
     mounted() {
-      this.clicksLimit = -16 + Math.floor(this.$refs.carouselWrapper.clientWidth/200);
+      this.clicksLimit = -1 - this.cardsLimit + Math.floor(this.$refs.carouselWrapper.clientWidth/200);
     }
 }
 </script>
