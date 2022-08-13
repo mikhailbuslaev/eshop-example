@@ -21,10 +21,10 @@ export default {
   data() {
     return {
       cards: [],
-      initCardsQuantity: 20,
+      initCardsQuantity: 15,
       nextCardsQuantity: 10,
       loadedCardsCounter: 0,
-      cardsLimit: 100,
+      cardsLimit: 25,
       cardsBefore: 0
     };
   },
@@ -42,16 +42,13 @@ export default {
        .then(response => {
          this.cards.push(...response.data.message);
          this.loadedCardsCounter += quantity;
-         console.log(startRow, this.loadedCardsCounter);
       });
     },
 
     handleScroll() {
       if (document.documentElement.clientHeight + window.pageYOffset >= document.body.offsetHeight-5) {
-        console.log('scroll');
         if (this.loadedCardsCounter >= this.cardsLimit) {
           window.removeEventListener('scroll', this.handleScroll);
-          console.log('stop');
           return;
         }
         this.getCards(this.cardsBefore+this.loadedCardsCounter-1, this.nextCardsQuantity);

@@ -36,3 +36,12 @@ func (s *Storage) UpdateCard(card *model.Card) error {
 	_, err := s.Db.NamedExec(`UPDATE cards SET id=:id, title=:title, price=:price, description=:description, count=:count WHERE id = :id`, card)
 	return err
 }
+
+func (s *Storage) GetCardsQuantity() (int, error) {
+	var quantity int
+	err := s.Db.Get(&quantity, `SELECT COUNT(id) FROM cards`)
+	if err != nil {
+		return -1, err
+	}
+	return quantity, nil
+}

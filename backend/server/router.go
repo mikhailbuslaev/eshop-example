@@ -16,6 +16,7 @@ func New() *Server {
 	s.Router = gin.Default()
 	// cards handlers
 	s.Router.POST("api/cards", s.getCardsHandler)
+	s.Router.POST("api/cards_count", s.getCardsQuantityHandler)
 	s.Router.POST("api/card", s.getCardHandler)
 	s.Router.POST("api/cards/delete", s.deleteCardHandler)
 	s.Router.POST("api/cards/add", s.addCardHandler)

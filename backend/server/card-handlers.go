@@ -134,3 +134,14 @@ func (s *Server) updateCardHandler(ctx *gin.Context) {
 	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": "card successfully updated"})
 }
+
+func (s *Server) getCardsQuantityHandler(ctx *gin.Context) {
+
+	quantity, err := s.Storage.GetCardsQuantity()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.Header("Access-Control-Allow-Origin", "*")
+	ctx.JSON(http.StatusOK, gin.H{"message": quantity})
+}
