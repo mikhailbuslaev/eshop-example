@@ -21,10 +21,10 @@ export default {
   data() {
     return {
       cards: [],
-      initCardsQuantity: 15,
-      nextCardsQuantity: 10,
+      initCardsQuantity: 30,
+      nextCardsQuantity: 15,
       loadedCardsCounter: 0,
-      cardsLimit: 25,
+      cardsLimit: 60,
       cardsBefore: 0
     };
   },
@@ -46,7 +46,7 @@ export default {
     },
 
     handleScroll() {
-      if (document.documentElement.clientHeight + window.pageYOffset >= document.body.offsetHeight-5) {
+      if (document.documentElement.clientHeight + window.pageYOffset >= document.body.offsetHeight-300) {
         if (this.loadedCardsCounter >= this.cardsLimit) {
           window.removeEventListener('scroll', this.handleScroll);
           return;

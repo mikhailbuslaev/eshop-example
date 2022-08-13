@@ -18,7 +18,7 @@ export default {
   data() {
     return {
         totalPagesCount: 0,
-        cardsLimit: 25,
+        cardsLimit: 60,
         currentPage: 0,
         paginationElements: []
     };
