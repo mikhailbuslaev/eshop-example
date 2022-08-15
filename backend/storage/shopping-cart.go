@@ -2,12 +2,14 @@ package storage
 
 import (
 	"github.com/mikhailbuslaev/eshop/model"
+	"github.com/jmoiron/sqlx/types"
 	"encoding/json"
 )
 
 func (s *Storage) GetShoppingCart(id string) (*model.ShoppingCart, error) {
 	var stringBuf string
 	cart := model.ShoppingCart{}
+	cart.Items = make([]model.CartItem, 0)
 	err := s.Db.Get(&stringBuf, `SELECT items FROM shopping_carts WHERE id=$1 LIMIT 1`, id)
 	if err != nil {
 		return nil, err
@@ -18,7 +20,7 @@ func (s *Storage) GetShoppingCart(id string) (*model.ShoppingCart, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	cart.Id = id
 	cart.JsonItems = buf
 	return &cart, nil
 }
@@ -34,11 +36,17 @@ func (s *Storage) DeleteShoppingCart(id string) error {
 }
 
 func (s *Storage) UpdateShoppingCart(cart *model.ShoppingCart) error {
-	_, err := s.Db.Exec(`UPDATE shopping_carts SET items='{"items":[{"id":"EArmHUoiSXaEuapiuFHR","cardid":"bBgQTGeSgr","count":1}]}' WHERE id = $1`, cart.Id)
+	j := types.JSONText(cart.JsonItems)
+
+	jsonVal, err := j.Value()
+	if err != nil {
+		return err
+	}
+	_, err = s.Db.Exec(`UPDATE shopping_carts SET items=$1 WHERE id = '1'`, jsonVal)
 	return err
 }
 
 func (s *Storage) ClearShoppingCart(id string) error {
-	_, err := s.Db.Exec(`UPDATE shopping_carts SET items=$1 WHERE id = $2`, `{"items":[]}`, id)
+	_, err := s.Db.Exec(`UPDATE shopping_carts SET items=$1 WHERE id = $2`,`{"items":[]}`, id)
 	return err
 }

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"encoding/json"
@@ -10,7 +11,9 @@ import (
 )
 
 func CartToJson(cart *model.ShoppingCart) error {
-	buf, err := json.Marshal(cart.Items)
+	jsonMap := make(map[string][]model.CartItem)
+	jsonMap["items"] = cart.Items
+	buf, err := json.Marshal(jsonMap)
 	if err != nil {
 		return err
 	}
@@ -26,7 +29,7 @@ func (s *Server) getShoppingCartHandler(ctx *gin.Context) {
 		return
 	}
 	ctx.Header("Access-Control-Allow-Origin", "*")
-	ctx.JSON(http.StatusOK, gin.H{"message": cart.Items})
+	ctx.JSON(http.StatusOK, gin.H{"message": *cart})
 }
 
 func (s *Server) clearShoppingCartHandler(ctx *gin.Context) {
@@ -42,20 +45,22 @@ func (s *Server) clearShoppingCartHandler(ctx *gin.Context) {
 
 func (s *Server) addToShoppingCartHandler(ctx *gin.Context) {
 	item := model.CartItem{}
-
 	cartId := ctx.PostForm("cartid")
 	if cartId == "" {
 		ctx.JSON(http.StatusOK, gin.H{"error": "cartId is not defined"})
+		return
 	}
 
 	cardId := ctx.PostForm("cardid")
 	if cardId == "" {
 		ctx.JSON(http.StatusOK, gin.H{"error": "cardId is not defined"})
+		return
 	}
 
 	stringCount := ctx.PostForm("count")
 	if stringCount == "" {
 		ctx.JSON(http.StatusOK, gin.H{"error": "count is not defined"})
+		return
 	}
 
 	count, err := strconv.Atoi(stringCount)
@@ -71,18 +76,22 @@ func (s *Server) addToShoppingCartHandler(ctx *gin.Context) {
 	cart, err := s.Storage.GetShoppingCart(cartId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 	cart.Items = append(cart.Items, item)
 
 	if err = s.Storage.ClearShoppingCart(cartId); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	if err = CartToJson(cart); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 	if err = s.Storage.UpdateShoppingCart(cart); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": "item successfully added"})
@@ -90,29 +99,52 @@ func (s *Server) addToShoppingCartHandler(ctx *gin.Context) {
 
 func (s *Server) deleteFromShoppingCartHandler(ctx *gin.Context) {
 	cartItemId := ctx.PostForm("cartitemid")
-	cartId := ctx.PostForm("id")
+	isExist := false
+
+	if cartItemId == "" {
+		ctx.JSON(http.StatusOK, gin.H{"error": "cartItemId is not defined"})
+		return
+	}
+	cartId := ctx.PostForm("cartid")
+	if cartId == "" {
+		ctx.JSON(http.StatusOK, gin.H{"error": "cartId is not defined"})
+		return
+	}
 
 	cart, err := s.Storage.GetShoppingCart(cartId)
 	if err != nil {
+		fmt.Println("error in get cart")
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
-	for i := range cart.Items {
+	length := len(cart.Items)
+	for i := 0; i < length; i++ {
 		if cart.Items[i].Id == cartItemId {
 			cart.Items = append(cart.Items[:i], cart.Items[i+1:]...)
+			isExist = true
+			break
 		}
+	}
+
+	if !isExist {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "there is no cart item with this id"})
+		return
 	}
 
 	if err = s.Storage.ClearShoppingCart(cartId); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	if err = CartToJson(cart); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	if err = s.Storage.UpdateShoppingCart(cart); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": "item successfully deleted"})
