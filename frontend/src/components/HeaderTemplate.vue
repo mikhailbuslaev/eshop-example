@@ -3,7 +3,8 @@
   <h1>header example</h1>
   <nav>
       <router-link to="/catalog/0">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/about">About</router-link> |
+      <router-link to="/user/shopping_cart">Shopping Cart</router-link>
   </nav>
 </div>
 </template>
