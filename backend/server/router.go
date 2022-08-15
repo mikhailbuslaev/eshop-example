@@ -21,8 +21,11 @@ func New() *Server {
 	s.Router.POST("api/cards/delete", s.deleteCardHandler)
 	s.Router.POST("api/cards/add", s.addCardHandler)
 	s.Router.POST("api/cards/update", s.updateCardHandler)
-	// catalog handler
-//	s.Router.Static("/catalog", "./website")
+	// shopping carts handlers
+	s.Router.POST("api/shopping_cart", s.getShoppingCartHandler)
+	s.Router.POST("api/shopping_cart/clear", s.clearShoppingCartHandler)
+	s.Router.POST("api/shopping_cart/add_item", s.addToShoppingCartHandler)
+	s.Router.POST("api/shopping_cart/delete_item", s.deleteFromShoppingCartHandler)
 	return s
 }
 
