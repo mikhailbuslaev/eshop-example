@@ -5,6 +5,18 @@
     <h3>{{ card.title }}</h3>
     <h4>{{ card.price }} ₽</h4>
     <h5>{{ card.description }}</h5>
+
+    <div id="item-counter">
+      <button v-on:click="decrementItemCount">-</button>
+      <h4>item count:{{ showItemCount }}</h4>
+      <button v-on:click="incrementItemCount">+</button>
+    </div>
+
+    <div id="addtocart-button" >
+      <button v-on:click="addToCart">
+      <h4>add to cart</h4>
+      </button>
+    </div>
 </div>
 </template>
 
@@ -15,6 +27,8 @@ export default {
   data() {
     return {
       card: {},
+      itemCount: 1,
+      cartId: 1
     };
   },
 
@@ -31,10 +45,39 @@ export default {
         this.card = response.data.message;
       });
     },
+
+    addToCart() {
+    var bodyFormData = new FormData();
+    bodyFormData.append('cardid', this.card.id);
+    bodyFormData.append('count', this.itemCount);
+    bodyFormData.append('cartid', this.cartId);
+    axios({
+      method: 'post',
+      url: 'http://localhost:1111/api/shopping_cart/add_item',
+      data: bodyFormData
+    })
+    .then(
+        alert('item successfully added to cart')
+      );
+    },
+    incrementItemCount() {
+      this.itemCount++;
+    },
+    decrementItemCount() {
+      if (!(this.cartId===0)) {
+        this.itemCount--;
+      }
+    }
   },
 
   beforeMount() {
     this.getCard();
+  },
+
+  computed: {
+    showItemCount: function() {
+      return this.itemCount
+    }
   }
 };
 </script>
@@ -47,7 +90,19 @@ export default {
   margin: 1em auto;
 }
 
+#item-counter {
+  justify-content:center;
+  display:flex;
+  wrap:nowrap;
+}
+
 .card-picture {
   width: 500px;
+}
+
+#addtocart-button {
+  justify-content:center;
+  display:flex;
+  wrap:nowrap;
 }
 </style>

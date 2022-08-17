@@ -102,4 +102,8 @@ export default {
   color: #2c3e50;
   margin: 20px;
 }
+
+a {
+  text-decoration: none;
+}
 </style>

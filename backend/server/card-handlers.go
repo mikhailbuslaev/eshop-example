@@ -80,7 +80,7 @@ func (s *Server) addCardHandler(ctx *gin.Context) {
 		return
 	}
 
-	if err = ctx.SaveUploadedFile(file, "../frontend/eshop/public/"+c.PicturePath); err != nil {
+	if err = ctx.SaveUploadedFile(file, "../frontend/public/"+c.PicturePath); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -122,7 +122,7 @@ func (s *Server) updateCardHandler(ctx *gin.Context) {
 		return
 	}
 	if err != http.ErrMissingFile {
-		if err = ctx.SaveUploadedFile(file, "../frontend/eshop/public/" + card.PicturePath); err != nil {
+		if err = ctx.SaveUploadedFile(file, "../frontend/public/" + card.PicturePath); err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
