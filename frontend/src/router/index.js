@@ -3,6 +3,7 @@ import CatalogView from '../views/CatalogView.vue'
 import AboutView from '../views/AboutView.vue'
 import CardView from '../views/CardView.vue'
 import ShoppingCartView from '../views/ShoppingCartView.vue'
+import AuthorizationView from '../views/AuthorizationView.vue'
 const routes = [
   {
     path: '/catalog/:page',
@@ -23,6 +24,11 @@ const routes = [
     path: '/user/shopping_cart', 
     name: 'shopping_cart',
     component: ShoppingCartView
+  },
+  {
+    path: '/login', 
+    name: 'login',
+    component: AuthorizationView
   }
 ]
 

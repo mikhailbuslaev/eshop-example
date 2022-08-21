@@ -47,10 +47,17 @@ export default {
     },
 
     addToCart() {
+    if (this.$cookies.isKey("token") && this.$cookies.isKey("userId")) {
+      this.userId = this.$cookies.get("userId");
+      this.token = this.$cookies.get("token");
+    } else {
+      this.$router.push({ path: '/login' });
+    }
+    
     var bodyFormData = new FormData();
     bodyFormData.append('cardid', this.card.id);
     bodyFormData.append('count', this.itemCount);
-    bodyFormData.append('cartid', this.cartId);
+    bodyFormData.append('token', this.token);
     axios({
       method: 'post',
       url: 'http://localhost:1111/api/shopping_cart/add_item',

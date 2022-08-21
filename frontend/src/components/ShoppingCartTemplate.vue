@@ -25,7 +25,8 @@ export default {
 
     data() {
         return {
-        cartId: 1,
+        cartId: 0,
+        token: '',
         cartItems: new Map(),
         emptyCard: {id:'', title:'', price:0, picturepath:'', count:''},
         userId: 0,
@@ -36,7 +37,7 @@ export default {
     methods: {
     getShoppingCart() {
         var bodyFormData = new FormData();
-        bodyFormData.append('id', this.userId);
+        bodyFormData.append('token', this.token);
         axios({
         method: 'post',
         url: 'http://localhost:1111/api/shopping_cart',
@@ -78,7 +79,7 @@ export default {
       },
     deleteItem(cartItemId = '') {
         var bodyFormData = new FormData();
-        bodyFormData.append('cartid', this.cartId);
+        bodyFormData.append('token', this.token);
         bodyFormData.append('cartitemid', cartItemId);
         axios({
         method: 'post',
@@ -94,7 +95,12 @@ export default {
 
     beforeMount() {
         this.summaryCost = 0;
-        this.userId = 1;
+        if (this.$cookies.isKey("token") && this.$cookies.isKey("userId")) {
+            this.userId = this.$cookies.get("userId");
+            this.token = this.$cookies.get("token");
+        } else {
+            this.$router.push({ path: '/login' });
+        }
         this.getShoppingCart();
     },
 
