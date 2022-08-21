@@ -26,6 +26,8 @@ func New() *Server {
 	s.Router.POST("api/shopping_cart/clear", s.clearShoppingCartHandler)
 	s.Router.POST("api/shopping_cart/add_item", s.addToShoppingCartHandler)
 	s.Router.POST("api/shopping_cart/delete_item", s.deleteFromShoppingCartHandler)
+	// authorization handlers
+	s.Router.POST("api/get_token", s.getTokenHandler)
 	return s
 }
 

@@ -22,7 +22,13 @@ func CartToJson(cart *model.ShoppingCart) error {
 }
 
 func (s *Server) getShoppingCartHandler(ctx *gin.Context) {
-	cartId := ctx.PostForm("id")
+	token := ctx.PostForm("token")
+	cartId, isValid := validateToken(token)
+	if !isValid {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "invalid authorization token"})
+		return
+	}
+
 	cart, err := s.Storage.GetShoppingCart(cartId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -33,7 +39,13 @@ func (s *Server) getShoppingCartHandler(ctx *gin.Context) {
 }
 
 func (s *Server) clearShoppingCartHandler(ctx *gin.Context) {
-	cartId := ctx.PostForm("id")
+	token := ctx.PostForm("token")
+	cartId, isValid := validateToken(token)
+	if !isValid {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "invalid authorization token"})
+		return
+	}
+
 	err := s.Storage.ClearShoppingCart(cartId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -45,9 +57,10 @@ func (s *Server) clearShoppingCartHandler(ctx *gin.Context) {
 
 func (s *Server) addToShoppingCartHandler(ctx *gin.Context) {
 	item := model.CartItem{}
-	cartId := ctx.PostForm("cartid")
-	if cartId == "" {
-		ctx.JSON(http.StatusOK, gin.H{"error": "cartId is not defined"})
+	token := ctx.PostForm("token")
+	cartId, isValid := validateToken(token)
+	if !isValid {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "invalid authorization token"})
 		return
 	}
 
@@ -98,16 +111,18 @@ func (s *Server) addToShoppingCartHandler(ctx *gin.Context) {
 }
 
 func (s *Server) deleteFromShoppingCartHandler(ctx *gin.Context) {
-	cartItemId := ctx.PostForm("cartitemid")
 	isExist := false
-
-	if cartItemId == "" {
-		ctx.JSON(http.StatusOK, gin.H{"error": "cartItemId is not defined"})
+	
+	token := ctx.PostForm("token")
+	cartId, isValid := validateToken(token)
+	if !isValid {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "invalid authorization token"})
 		return
 	}
-	cartId := ctx.PostForm("cartid")
-	if cartId == "" {
-		ctx.JSON(http.StatusOK, gin.H{"error": "cartId is not defined"})
+
+	cartItemId := ctx.PostForm("cartitemid")
+	if cartItemId == "" {
+		ctx.JSON(http.StatusOK, gin.H{"error": "cartItemId is not defined"})
 		return
 	}
 

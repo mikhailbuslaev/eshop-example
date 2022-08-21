@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-<h2>summary: {{this.summaryCost}}₽</h2>
+<h2>summary: {{ showSummaryCost }}₽</h2>
 </div>
 
 </template>
@@ -60,8 +60,8 @@ export default {
         .then((response) => {
             let bufObj = this.cartItems.get(cartId);
             this.cartItems.set(bufObj.itemData.id, {itemData:bufObj.itemData, cardData:response.data.message});
-            let Obj = this.cartItems.get(cartId);
-            this.increaseSummaryCost(this.renderItemCost(Obj.itemData.count, Obj.cardData.price));
+            let obj = this.cartItems.get(cartId);
+            this.increaseSummaryCost(this.renderItemCost(obj.itemData.count, obj.cardData.price));
         });
       },
     renderItemCost(first='1', second='1') {
@@ -69,6 +69,12 @@ export default {
       },
     increaseSummaryCost(itemCost = 0) {
         this.summaryCost += itemCost;
+      },
+    calculateSummaryCost() {
+        this.summaryCost = 0;
+        this.cartItems.forEach((value) => {
+            this.increaseSummaryCost(this.renderItemCost(value.itemData.count, value.cardData.price));
+        });
       },
     deleteItem(cartItemId = '') {
         var bodyFormData = new FormData();
@@ -80,15 +86,22 @@ export default {
         data: bodyFormData
         })
         .then(
-            this.cartItems.delete(cartItemId)
+            this.cartItems.delete(cartItemId),
+            this.calculateSummaryCost()
         );
-    }
+      }
     },
 
     beforeMount() {
         this.summaryCost = 0;
         this.userId = 1;
         this.getShoppingCart();
+    },
+
+    computed: {
+        showSummaryCost: function() {
+            return this.summaryCost
+        }
     }
 }
 </script>
