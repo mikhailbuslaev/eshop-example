@@ -9,5 +9,5 @@ type CartItem struct {
 type ShoppingCart struct {
 	Id string `json:"id"`
 	Items []CartItem `json:"items"`
-	JsonItems []byte
+	JsonItems []byte `json:"-"`
 }

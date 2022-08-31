@@ -9,6 +9,7 @@ import (
 )
 
 func (s *Server) getCardsHandler(ctx *gin.Context) {
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	quantity, err := strconv.Atoi(ctx.PostForm("quantity"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -29,33 +30,33 @@ func (s *Server) getCardsHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": *cards})
 }
 
 func (s *Server) getCardHandler(ctx *gin.Context) {
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	cardId := ctx.PostForm("id")
 	card, err := s.Storage.GetCard(cardId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": *card})
 }
 
 func (s *Server) deleteCardHandler(ctx *gin.Context) {
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	cardId := ctx.PostForm("id")
 	err := s.Storage.DeleteCard(cardId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": "card successfully removed"})
 }
 
 func (s *Server) addCardHandler(ctx *gin.Context) {
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	c := &model.Card{}
 	var err error
 	c.Title = ctx.PostForm("title")
@@ -84,11 +85,11 @@ func (s *Server) addCardHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": "card successfully added"})
 }
 
 func (s *Server) updateCardHandler(ctx *gin.Context) {
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	cardId := ctx.PostForm("id")
 	println(cardId)
 	card, err := s.Storage.GetCard(cardId)
@@ -131,17 +132,15 @@ func (s *Server) updateCardHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": "card successfully updated"})
 }
 
 func (s *Server) getCardsQuantityHandler(ctx *gin.Context) {
-
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	quantity, err := s.Storage.GetCardsQuantity()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": quantity})
 }

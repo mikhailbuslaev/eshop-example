@@ -5,6 +5,7 @@ import (
 	"github.com/golang-jwt/jwt"
 	"math/rand"
 	"time"
+	"strconv"
 )
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -35,4 +36,26 @@ func validateToken(tokenString string) (string, bool) {
 		}
 	}
 	return "", false
+}
+
+func (s *Server) getShoppingCartCost(cartId string) (float64, error) {
+	var summaryCost float64
+
+	cart, err := s.Storage.GetShoppingCart(cartId)
+	if err != nil {
+		return 0.0, err
+	}
+
+	for i := range cart.Items {
+		card, err := s.Storage.GetCard(cart.Items[i].CardId)
+		if err != nil {
+			return 0.0, err
+		}
+		cardCost, err := strconv.ParseFloat(card.Price, 64)
+		if err != nil {
+			return 0.0, err
+		}
+		summaryCost += cardCost*float64(cart.Items[i].Count)
+	}
+	return summaryCost, nil
 }

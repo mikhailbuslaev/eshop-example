@@ -22,6 +22,7 @@ func CartToJson(cart *model.ShoppingCart) error {
 }
 
 func (s *Server) getShoppingCartHandler(ctx *gin.Context) {
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	token := ctx.PostForm("token")
 	cartId, isValid := validateToken(token)
 	if !isValid {
@@ -34,11 +35,11 @@ func (s *Server) getShoppingCartHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": *cart})
 }
 
 func (s *Server) clearShoppingCartHandler(ctx *gin.Context) {
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	token := ctx.PostForm("token")
 	cartId, isValid := validateToken(token)
 	if !isValid {
@@ -51,11 +52,11 @@ func (s *Server) clearShoppingCartHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": "card successfully cleared"})
 }
 
 func (s *Server) addToShoppingCartHandler(ctx *gin.Context) {
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	item := model.CartItem{}
 	token := ctx.PostForm("token")
 	cartId, isValid := validateToken(token)
@@ -106,11 +107,11 @@ func (s *Server) addToShoppingCartHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": "item successfully added"})
 }
 
 func (s *Server) deleteFromShoppingCartHandler(ctx *gin.Context) {
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	isExist := false
 	
 	token := ctx.PostForm("token")
@@ -161,6 +162,5 @@ func (s *Server) deleteFromShoppingCartHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.Header("Access-Control-Allow-Origin", "*")
 	ctx.JSON(http.StatusOK, gin.H{"message": "item successfully deleted"})
 }

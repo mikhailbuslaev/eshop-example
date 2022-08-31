@@ -49,7 +49,6 @@ export default {
         })
         .catch((error) => {
             this.isError = true;
-            console.log(error);
         });
       }
     }
