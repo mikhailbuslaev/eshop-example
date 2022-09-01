@@ -8,9 +8,9 @@ type DeliveryInfo struct {
 
 type Order struct {
 	Id string `json:"id"`
-	UserId string `json:"-"`
-	Delivery DeliveryInfo `json:"-"`
-	Items []CartItem `json:"-"`
-	Cost float64 `json:"-"`
-	JsonData string `json:data`
+	UserId string `json:"user_id"`
+	Delivery DeliveryInfo `json:"delivery"`
+	Items []CartItem `json:"items"`
+	Cost float64 `json:"cost"`
+	JsonData string `json:-`
 }

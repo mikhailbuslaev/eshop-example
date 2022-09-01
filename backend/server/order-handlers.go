@@ -108,6 +108,7 @@ func (s *Server) addOrderHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 	o.JsonData = string(jsonData)
 
 	if err = s.Storage.AddOrder(o); err != nil {

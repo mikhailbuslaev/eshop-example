@@ -8,38 +8,20 @@ import (
 
 func (s *Storage) GetOrders(userId string, quantity, start int) (*[]model.Order, error) {
 	orders := make([]model.Order, 0)
-	ids := make([]string, 0)
-	var stringIds string
-	var stringJsons string
-
-	err := s.Db.Select(&stringIds, `SELECT id FROM orders WHERE user_id=$1 OFFSET $2 FETCH FIRST $3 ROWS ONLY`, userId, start, quantity)
-	if err != nil {
-		return nil, err
-	}
-
 	jsons := make([]string, 0)
-	err = s.Db.Select(&stringJsons, `SELECT data FROM orders WHERE user_id=$1 OFFSET $2 FETCH FIRST $3 ROWS ONLY`, userId, start, quantity)
+	err := s.Db.Select(&jsons, `SELECT data FROM orders WHERE user_id=$1 OFFSET $2 FETCH FIRST $3 ROWS ONLY`, userId, start, quantity)
 	if err != nil {
 		return nil, err
 	}
 
-	buf := []byte(stringIds)
-	err = json.Unmarshal(buf, &ids)
-	if err != nil {
-		return nil, err
-	}
-
-	buf = []byte(stringJsons)
-	err = json.Unmarshal(buf, &jsons)
-	if err != nil {
-		return nil, err
-	}
-
-	for i := range ids {
+	for i := range jsons {
 		order := model.Order{}
-		order.Id = ids[i]
-		order.JsonData = jsons[i]
-		order.UserId = userId
+
+		buf := []byte(jsons[i])
+		err = json.Unmarshal(buf, &order)
+		if err != nil {
+			return nil, err
+		}
 		orders = append(orders, order)
 	}
 	return &orders, nil
@@ -48,7 +30,14 @@ func (s *Storage) GetOrders(userId string, quantity, start int) (*[]model.Order,
 func (s *Storage) GetOrder(userId, id string) (*model.Order, error) {
 	order := model.Order{}
 	order.Id = id
-	err := s.Db.Get(&order.JsonData, `SELECT data FROM orders WHERE id=$1 AND user_id=$2 LIMIT 1`, id, userId)
+	var jsonString string
+	err := s.Db.Get(&jsonString, `SELECT data FROM orders WHERE id=$1 AND user_id=$2 LIMIT 1`, id, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	buf := []byte(jsonString)
+	err = json.Unmarshal(buf, &order)
 	if err != nil {
 		return nil, err
 	}
