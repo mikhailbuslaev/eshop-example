@@ -1,9 +1,9 @@
 <template>
 <div class="header">
-  <h1>header example</h1>
+  <h1>Online shop</h1>
   <nav>
-      <router-link to="/catalog/0">Home</router-link> |
-      <router-link to="/about">About</router-link> |
+      <router-link to="/catalog/0">Home</router-link> | 
+      <router-link to="/about">About</router-link> | 
       <router-link to="/user/shopping_cart">Shopping Cart</router-link>
   </nav>
 </div>
@@ -19,10 +19,11 @@ export default {
 <style scoped>
 .header {
   height:200px;
-  background-color: #ccc;
+  background-color: rgb(200, 200, 200);
 }
 
 h1 {
+  text-align:center;
   padding-top:30px;
   margin:0px;
 }
@@ -37,6 +38,6 @@ nav a {
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: rgb(200, 100, 100);
 }
 </style>

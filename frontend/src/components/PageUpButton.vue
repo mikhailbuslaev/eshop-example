@@ -1,6 +1,8 @@
 <template>
 <div id="pageup-button" >
-    <button v-if="!isHidden" v-on:click="moveToTop">&#129045;</button>
+    <button v-if="!isHidden" v-on:click="moveToTop">
+      <h3>&#129121;</h3>
+    </button>
 </div>
 </template>
 
@@ -49,8 +51,12 @@ button {
   border: none;
   border-radius: 50%;
   cursor: pointer;
+  background-color: rgb(150, 150, 150);
+}
+
+h3 {
+  font-size: 25px;
   color:white;
-  background-color: #ccc;
-  font-size: 50px;
+  margin:0px;
 }
 </style>

@@ -1,12 +1,12 @@
 <template>
-<h1>e-shop catalog example</h1>
+<h2>Catalog example</h2>
 <div id="catalog-body">
     <div v-for="card in cards" :key="card.id">
     <a v-bind:href="'http://localhost:8081/#/product/'+card.id">
       <div class="card">
         <img class="card-picture" :src="card.picturepath"/>
-        <h3>{{ card.title }}</h3>
-        <h4>{{ card.price }} ₽</h4>
+        <h3>{{ card.price }} ₽</h3>
+        <h4>{{ card.title }}</h4>
       </div>
       </a>
     </div>
@@ -90,12 +90,15 @@ export default {
 
 .card {
   width: 200px;
-  background: #ccc;
   margin: 1em auto;
 }
 
 .card-picture {
   width: 200px;
+}
+
+h4 {
+  color: rgb(150, 150, 150);
 }
 
 a:link {

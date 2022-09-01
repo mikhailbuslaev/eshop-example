@@ -106,4 +106,8 @@ export default {
 a {
   text-decoration: none;
 }
+
+h3 {
+  padding:5px;
+}
 </style>

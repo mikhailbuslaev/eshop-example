@@ -3,11 +3,11 @@
     <div id="authform-body">
         <form @submit="authRequest">
         <label for="fname">
-            <h4>Username:</h4>
+            <h3>Username</h3>
         </label>
         <input type="text" v-model="userId">
         <label for="lname">
-            <h4>Password:</h4>
+            <h3>Password</h3>
         </label>
         <input type="text" v-model="password">
         <input type="submit" value="Login">
@@ -47,9 +47,9 @@ export default {
             this.$cookies.set('userId', this.userId, '30min', '', '', true);
             this.$router.push({ path: '/catalog/0' });
         })
-        .catch((error) => {
-            this.isError = true;
-        });
+        .catch(
+            this.isError = true
+        );
       }
     }
 }
@@ -64,5 +64,38 @@ export default {
     height:100px;
     background-color:red;
     border-radius:10px;
+}
+
+#authform-body {
+    width:100%;
+    display:flex;
+    justify-content:center;
+}
+
+form {
+    width:50%;
+    display:flex;
+    flex-direction:column;   
+}
+
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius:5px;
+    border: 1px solid rgb(150, 150, 150);
+    font-size: 20px;
+}
+
+input[type=submit] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius:5px;
+    border: 1px solid rgb(150, 150, 150);
+    font-size: 20px;
+    color: rgb(75, 75, 75);
 }
 </style>
