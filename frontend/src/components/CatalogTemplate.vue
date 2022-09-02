@@ -1,6 +1,6 @@
 <template>
 <h2>Catalog example</h2>
-<div id="catalog-body">
+<div id="catalog-container">
     <div v-for="card in cards" :key="card.id">
     <a v-bind:href="'http://localhost:8081/#/product/'+card.id">
       <div class="card">
@@ -82,8 +82,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#catalog-body {
+#catalog-container {
   display: flex;
+  justify-content:space-evenly;
   flex-wrap: wrap;
   gap: 20px 20px;
 }
