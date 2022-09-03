@@ -6,14 +6,32 @@
             <img id="cartitem-picture" :src="cartItem.cardData.picturepath"/>
             <h4 class="cartitem-text">{{ cartItem.cardData.title }}</h4>
             <h4 class="cartitem-text">{{ cartItem.cardData.price }}*{{ cartItem.itemData.count }} = {{this.renderItemCost(cartItem.cardData.price, cartItem.itemData.count)}}₽</h4>
-            <div id="removeitem-button-container" >
+            <div id="removeitem-button-container">
                 <button id="removeitem-button" v-on:click="deleteItem(cartItem.itemData.id)">
                 <h4>&#215;</h4>
                 </button>
             </div>
         </div>
     </div>
-<h2>summary: {{ showSummaryCost }}₽</h2>
+<h3>Summary cost: {{ showSummaryCost }}₽</h3>
+<button id="createorder-button" v-on:click="showDeliveryForm" v-if="deliveryFormHidden">Make order</button>
+<div id="deliveryForm-container" v-if="!deliveryFormHidden">
+    <form id="deliveryform" @submit="createOrder">
+        <label for="fname">
+            <h3>Zip code</h3>
+        </label>
+        <input type="text" v-model="deliveryData.zip">
+        <label for="lname">
+            <h3>Address</h3>
+        </label>
+        <input type="text" v-model="deliveryData.address">
+        <label for="lname">
+            <h3>Receiver name</h3>
+        </label>
+        <input type="text" v-model="deliveryData.receiver">
+        <input type="submit" value="Create order">
+    </form>
+</div>
 </div>
 
 </template>
@@ -30,7 +48,9 @@ export default {
         cartItems: new Map(),
         emptyCard: {id:'', title:'', price:0, picturepath:'', count:''},
         userId: 0,
-        summaryCost: 0
+        summaryCost: 0,
+        deliveryData: {zip:'', address:'', receiver:''},
+        deliveryFormHidden: true
         };
     },
 
@@ -90,7 +110,26 @@ export default {
             this.cartItems.delete(cartItemId),
             this.calculateSummaryCost()
         );
-      }
+      },
+    createOrder() {
+        var bodyFormData = new FormData();
+        bodyFormData.append('token', this.token);
+        bodyFormData.append('delivery-zip', this.deliveryData.zip);
+        bodyFormData.append('delivery-address', this.deliveryData.address);
+        bodyFormData.append('delivery-receiver', this.deliveryData.receiver);
+        axios({
+        method: 'post',
+        url: 'http://localhost:1111/api/orders/add',
+        data: bodyFormData
+        })
+        .then(
+            alert('Order successfully created'),
+            this.$router.push({ path: '/user/orders/0' })
+        );
+      },
+    showDeliveryForm() {
+        this.deliveryFormHidden = false;
+    }
     },
 
     beforeMount() {
