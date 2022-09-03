@@ -1,22 +1,25 @@
 <template>
-<h1>card view example</h1>
-<div id="card-body">
-    <img class="card-picture" :src="card.picturepath"/>
+<div id="card-container">
+  <div id="cardpicture-container">
+    <img id="cardpicture" :src="card.picturepath"/>
+  </div>
+  <div id="cardinfo-container">
     <h3>{{ card.title }}</h3>
     <h4>{{ card.price }} ₽</h4>
-    <h5>{{ card.description }}</h5>
+    <h5 id="carddescription">{{ card.description }}</h5>
 
     <div id="item-counter">
-      <button v-on:click="decrementItemCount">-</button>
-      <h4>item count:{{ showItemCount }}</h4>
-      <button v-on:click="incrementItemCount">+</button>
+      <button class="counter-button" id="minus" v-on:click="decrementItemCount">-</button>
+      <h4 id="counter-button-text"> count: {{ showItemCount }} </h4>
+      <button class="counter-button" id="plus" v-on:click="incrementItemCount">+</button>
     </div>
 
-    <div id="addtocart-button" >
-      <button v-on:click="addToCart">
-      <h4>add to cart</h4>
+    <div id="addtocart-button-container" >
+      <button id="addtocart-button" v-on:click="addToCart">
+      <h4 id="addtocart-button-text">Add to cart</h4>
       </button>
     </div>
+  </div>
 </div>
 </template>
 
@@ -91,10 +94,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#card-body {
-  width: 500px;
-  background: #ccc;
-  margin: 1em auto;
+#card-container {
+  width: 100%;
+  display:flex;
+  justify-content:space-evenly;
 }
 
 #item-counter {
@@ -103,13 +106,63 @@ export default {
   wrap:nowrap;
 }
 
-.card-picture {
+#cardpicture {
   width: 500px;
+  margin:5%;
 }
 
-#addtocart-button {
+#addtocart-button-container {
   justify-content:center;
   display:flex;
   wrap:nowrap;
+}
+
+#carddescription {
+  max-width:500px;
+}
+
+.counter-button {
+  background-color:white;
+  border:0px;
+  font-size:25px;
+  color:rgb(75, 75, 75);
+  width:25px;
+  padding:0px;
+  border-radius:50%;
+}
+
+#plus:hover {
+  color:white;
+  background-color: green;
+}
+
+#minus:hover {
+  color: white;
+  background-color: red;
+}
+
+#addtocart-button {
+  background-color:white;
+  border:0px;
+  border-radius:15px;
+  font-size:20px;
+  color:rgb(75, 75, 75);
+}
+
+#addtocart-button:hover {
+  background-color:green;
+  color: white;
+}
+
+h5 {
+  color: rgb(150, 150, 150);
+}
+
+#counter-button-text {
+  margin:5px;
+}
+
+#addtocart-button-text {
+  margin:10px;
 }
 </style>

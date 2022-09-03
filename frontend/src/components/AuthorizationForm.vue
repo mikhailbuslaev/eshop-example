@@ -45,7 +45,7 @@ export default {
             this.isError = false;
             this.$cookies.set('token', response.data.message, '30min', '', '', true);
             this.$cookies.set('userId', this.userId, '30min', '', '', true);
-            this.$router.push({ path: '/catalog/0' });
+            this.$router.go(-1);
         })
         .catch(
             this.isError = true

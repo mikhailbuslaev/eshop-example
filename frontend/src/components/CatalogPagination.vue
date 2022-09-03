@@ -6,7 +6,7 @@
           <h3 v-if="paginationElement.isLink" >{{ paginationElement.num }}</h3>
           <h3 v-else>...</h3>
         </div>
-        </a>
+      </a>
     </div>
 </div>
 </template>
@@ -105,6 +105,10 @@ export default {
 
 a {
   text-decoration: none;
+}
+
+.pagination-element:hover {
+  background-color:yellow;
 }
 
 h3 {

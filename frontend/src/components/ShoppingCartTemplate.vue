@@ -3,12 +3,12 @@
 <h1>your shopping cart:</h1>
     <div v-for="[cartItemId, cartItem] in cartItems" :key="cartItemId">
         <div class="shoppingcart-item">
-            <img class="card-picture" :src="cartItem.cardData.picturepath"/>
-            <h4>{{ cartItem.cardData.title }}</h4>
-            <h4>{{ cartItem.cardData.price }}*{{ cartItem.itemData.count }} = {{this.renderItemCost(cartItem.cardData.price, cartItem.itemData.count)}}₽</h4>
-            <div id="removeitem-button" >
-                <button v-on:click="deleteItem(cartItem.itemData.id)">
-                <h4>delete item</h4>
+            <img id="cartitem-picture" :src="cartItem.cardData.picturepath"/>
+            <h4 class="cartitem-text">{{ cartItem.cardData.title }}</h4>
+            <h4 class="cartitem-text">{{ cartItem.cardData.price }}*{{ cartItem.itemData.count }} = {{this.renderItemCost(cartItem.cardData.price, cartItem.itemData.count)}}₽</h4>
+            <div id="removeitem-button-container" >
+                <button id="removeitem-button" v-on:click="deleteItem(cartItem.itemData.id)">
+                <h4>&#215;</h4>
                 </button>
             </div>
         </div>
@@ -98,10 +98,10 @@ export default {
         if (this.$cookies.isKey("token") && this.$cookies.isKey("userId")) {
             this.userId = this.$cookies.get("userId");
             this.token = this.$cookies.get("token");
+            this.getShoppingCart();
         } else {
             this.$router.push({ path: '/login' });
         }
-        this.getShoppingCart();
     },
 
     computed: {
@@ -120,5 +120,25 @@ export default {
     flex-direction: row;
     gap: 15%;
     justify-content:center;
+}
+
+#removeitem-button {
+    background-color:white;
+    border:0px;
+    font-size:30px;
+    color:rgb(75, 75, 75);
+}
+
+#removeitem-button:hover {
+    color: red;
+}
+
+.cartitem-text {
+    padding-top:25px;
+    color:rgb(100, 100, 100);
+}
+
+#cartitem-picture {
+    width:100px;
 }
 </style>
