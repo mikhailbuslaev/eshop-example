@@ -31,7 +31,8 @@ export default {
     return {
       card: {},
       itemCount: 1,
-      cartId: 1
+      cartId: 1, 
+      category: ''
     };
   },
 
@@ -82,6 +83,7 @@ export default {
 
   beforeMount() {
     this.getCard();
+    this.category = this.card.category;
   },
 
   computed: {

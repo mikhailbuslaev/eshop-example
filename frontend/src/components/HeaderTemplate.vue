@@ -1,7 +1,7 @@
 <template>
 <div id="header-container">
   <nav id="logo-container">
-    <router-link to="/catalog/0">
+    <router-link to="/catalog/shoes/0">
       <h1>Online shop</h1>
     </router-link>
   </nav>

@@ -2,7 +2,7 @@
 <h2>Catalog example</h2>
 <div id="catalog-container">
     <div v-for="card in cards" :key="card.id">
-    <a v-bind:href="'http://localhost:8081/#/product/'+card.id">
+    <a v-bind:href="'http://localhost:8081/#/product/'+card.category+'/'+card.id">
       <div class="card">
         <img class="card-picture" :src="card.picturepath"/>
         <h3>{{ card.price }} ₽</h3>
@@ -34,6 +34,7 @@ export default {
       var bodyFormData = new FormData();
       bodyFormData.append('quantity', quantity);
       bodyFormData.append('startrow', startRow);
+      bodyFormData.append('category', this.$route.params.category);
       axios({
         method: 'post',
         url: 'http://localhost:1111/api/cards',
@@ -112,7 +113,4 @@ a:visited {
   color:#2c3e50;
 }
 
-a:hover {
-  width:300px;
-}
 </style>

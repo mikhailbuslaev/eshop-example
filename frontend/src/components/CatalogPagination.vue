@@ -1,7 +1,7 @@
 <template>
 <div id="pagination-body" ref=paginationBody>
     <div v-for="paginationElement in paginationElements" :key="paginationElement.num">
-      <a v-if="paginationElement.isLink" v-bind:href="'http://localhost:8081/#/catalog/'+paginationElement.num">
+      <a v-if="paginationElement.isLink" v-bind:href="'http://localhost:8081/#/catalog/'+this.$route.params.category+'/'+paginationElement.num">
         <div class="pagination-element">
           <h3 v-if="paginationElement.isLink" >{{ paginationElement.num }}</h3>
           <h3 v-else>...</h3>

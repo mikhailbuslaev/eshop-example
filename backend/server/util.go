@@ -2,10 +2,11 @@ package server
 
 import (
 	"fmt"
-	"github.com/golang-jwt/jwt"
 	"math/rand"
-	"time"
 	"strconv"
+	"time"
+
+	"github.com/golang-jwt/jwt"
 )
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -22,14 +23,14 @@ func randomString(n int) string {
 func validateToken(tokenString string) (string, bool) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 		return []byte(jwtKey), nil
 	})
 	if err != nil {
 		return "", false
 	}
-	
+
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		if claims.Valid() == nil && claims["id"] != nil {
 			return claims["id"].(string), true
@@ -55,7 +56,7 @@ func (s *Server) getShoppingCartCost(cartId string) (float64, error) {
 		if err != nil {
 			return 0.0, err
 		}
-		summaryCost += cardCost*float64(cart.Items[i].Count)
+		summaryCost += cardCost * float64(cart.Items[i].Count)
 	}
 	return summaryCost, nil
 }

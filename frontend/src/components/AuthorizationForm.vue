@@ -1,6 +1,6 @@
 <template>
 <div id="authform-wrapper">
-    <div id="authform-body">
+    <div id="authform-container">
         <form @submit="authRequest">
         <label for="fname">
             <h3>Username</h3>
@@ -12,9 +12,6 @@
         <input type="text" v-model="password">
         <input type="submit" value="Login">
         </form>
-    </div>
-    <div id="autherror-body" v-if="isError">
-        <h4>Auth error, try another login/password</h4>
     </div>
 </div>
 </template>
@@ -48,7 +45,7 @@ export default {
             this.$router.go(-1);
         })
         .catch(
-            this.isError = true
+            alert('wrong login/password')
         );
       }
     }
@@ -57,16 +54,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#autherror-body {
-    margin: auto;
-    color:white;
-    width:500px;
-    height:100px;
-    background-color:red;
-    border-radius:10px;
-}
 
-#authform-body {
+#authform-container {
     width:100%;
     display:flex;
     justify-content:center;

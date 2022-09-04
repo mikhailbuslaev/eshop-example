@@ -69,8 +69,8 @@ export default {
     display:flex;
     flex-direction:column;
     align-items:flex-start;
-    background-color: rgb(150, 150, 150);
     border-radius: 20px;
-    color:white;
+    border: 1px solid rgb(150,150,150);
+    color:rgb(75,75,75);
 }
 </style>

@@ -7,7 +7,7 @@ import AuthorizationView from '../views/AuthorizationView.vue'
 import OrdersView from '../views/OrdersView.vue'
 const routes = [
   {
-    path: '/catalog/:page',
+    path: '/catalog/:category/:page',
     name: 'catalog',
     component: CatalogView
   },
@@ -17,7 +17,7 @@ const routes = [
     component: AboutView
   },
   { 
-    path: '/product/:id', 
+    path: '/product/:category/:id', 
     name: 'card',
     component: CardView 
   },

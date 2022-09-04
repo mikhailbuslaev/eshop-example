@@ -14,8 +14,10 @@
         </div>
     </div>
 <h3>Summary cost: {{ showSummaryCost }}₽</h3>
-<button id="createorder-button" v-on:click="showDeliveryForm" v-if="deliveryFormHidden">Make order</button>
-<div id="deliveryForm-container" v-if="!deliveryFormHidden">
+<div id="createorder-button-wrapper">
+    <button id="createorder-button" v-on:click="showDeliveryForm" v-if="deliveryFormHidden">Make order</button>
+</div>
+<div id="deliveryform-container" v-if="!deliveryFormHidden">
     <form id="deliveryform" @submit="createOrder">
         <label for="fname">
             <h3>Zip code</h3>
@@ -180,4 +182,55 @@ export default {
 #cartitem-picture {
     width:100px;
 }
+
+#createorder-button {
+    background-color:white;
+    border:0px;
+    font-size:30px;
+    color:rgb(75, 75, 75);
+    border-radius:10px;
+}
+
+#createorder-button:hover {
+    color: white;
+    background-color: green;
+}
+
+#createorder-button-wrapper {
+    margin: 20px;
+}
+
+#deliveryform-container {
+    width:100%;
+    display:flex;
+    justify-content:center;
+}
+
+form {
+    width:50%;
+    display:flex;
+    flex-direction:column;   
+}
+
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius:5px;
+    border: 1px solid rgb(150, 150, 150);
+    font-size: 20px;
+}
+
+input[type=submit] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius:5px;
+    border: 1px solid rgb(150, 150, 150);
+    font-size: 20px;
+    color: rgb(75, 75, 75);
+}
+
 </style>

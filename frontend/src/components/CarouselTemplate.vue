@@ -34,6 +34,7 @@ export default {
     getCards() {
         var bodyFormData = new FormData();
         bodyFormData.append('quantity', this.cardsLimit);
+        bodyFormData.append('category', this.$route.params.category);
         bodyFormData.append('startrow', 0);
         axios({
         method: 'post',

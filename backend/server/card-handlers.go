@@ -11,6 +11,7 @@ import (
 func (s *Server) getCardsHandler(ctx *gin.Context) {
 	ctx.Header("Access-Control-Allow-Origin", "*")
 	quantity, err := strconv.Atoi(ctx.PostForm("quantity"))
+	var cards *[]model.Card
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -24,8 +25,17 @@ func (s *Server) getCardsHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	
-	cards, err := s.Storage.GetCards(quantity, startRow)
+	category := ctx.PostForm("category")
+	if category == "" {
+		cards, err = s.Storage.GetCards(quantity, startRow)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusOK, gin.H{"message": *cards})
+		return
+	}
+	cards, err = s.Storage.GetCardsByCategory(quantity, startRow, category)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -62,6 +72,7 @@ func (s *Server) addCardHandler(ctx *gin.Context) {
 	c.Title = ctx.PostForm("title")
 	c.Price = ctx.PostForm("price")
 	c.Description = ctx.PostForm("description")
+	c.Category = ctx.PostForm("category")
 	c.Count, err = strconv.Atoi(ctx.PostForm("count"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -107,6 +118,9 @@ func (s *Server) updateCardHandler(ctx *gin.Context) {
 	if description := ctx.PostForm("description"); description != "" {
 		card.Description = description
 	}
+	if category := ctx.PostForm("category"); category != "" {
+		card.Category = category
+	}
 	stringCount := ctx.PostForm("count")
 	if stringCount != "" {
 		count, err := strconv.Atoi(stringCount)
@@ -123,7 +137,7 @@ func (s *Server) updateCardHandler(ctx *gin.Context) {
 		return
 	}
 	if err != http.ErrMissingFile {
-		if err = ctx.SaveUploadedFile(file, "../frontend/public/" + card.PicturePath); err != nil {
+		if err = ctx.SaveUploadedFile(file, "../frontend/public/"+card.PicturePath); err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
@@ -137,7 +151,19 @@ func (s *Server) updateCardHandler(ctx *gin.Context) {
 
 func (s *Server) getCardsQuantityHandler(ctx *gin.Context) {
 	ctx.Header("Access-Control-Allow-Origin", "*")
-	quantity, err := s.Storage.GetCardsQuantity()
+	var err error
+	var quantity int
+	category := ctx.PostForm("category")
+	if category == "" {
+		quantity, err = s.Storage.GetCardsQuantity()
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusOK, gin.H{"message": quantity})
+		return
+	}
+	quantity, err = s.Storage.GetCardsQuantityByCategory(category)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
