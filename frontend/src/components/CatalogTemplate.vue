@@ -6,7 +6,7 @@
       <div class="card">
         <img class="card-picture" :src="card.picturepath"/>
         <h3>{{ card.price }} ₽</h3>
-        <h4>{{ card.title }}</h4>
+        <h4>{{ card.firm }}/{{ card.title }}</h4>
       </div>
       </a>
     </div>

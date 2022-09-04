@@ -4,7 +4,7 @@
     <img id="cardpicture" :src="card.picturepath"/>
   </div>
   <div id="cardinfo-container">
-    <h3>{{ card.title }}</h3>
+    <h3>{{ card.firm }} {{ card.title }}</h3>
     <h4>{{ card.price }} ₽</h4>
     <h5 id="carddescription">{{ card.description }}</h5>
 

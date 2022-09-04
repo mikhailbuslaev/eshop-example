@@ -2,11 +2,11 @@
 <div id="carousel-wrapper" ref="carouselWrapper">
   <div id="carousel-body" ref="carouselBody">
       <div v-for="card in cards" :key="card.id">
-      <a v-bind:href="'http://localhost:8081/#/product/'+card.id">
+      <a v-bind:href="'http://localhost:8081/#/product/'+this.$route.params.category+'/'+card.id">
         <div class="card">
           <img class="card-picture" :src="card.picturepath"/>
-          <h3>{{ card.title }}</h3>
-          <h4>{{ card.price }} ₽</h4>
+          <h4 id="card-price">{{ card.price }} ₽</h4>
+          <h4 id="card-title">{{ card.firm }}/{{ card.title }}</h4>
         </div>
         </a>
       </div>
@@ -97,7 +97,6 @@ export default {
 
 .card {
   width: 200px;
-  background: #ccc;
 }
 
 .card-picture {
@@ -140,5 +139,12 @@ a:link {
 a:visited {
   text-decoration: none;
   color:#2c3e50;
+}
+
+#card-price {
+  color: rgb(75, 75, 75);
+}
+#card-title {
+  color: rgb(150, 150, 150);
 }
 </style>
